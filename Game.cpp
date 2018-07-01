@@ -139,9 +139,10 @@ void Game::run()
     set_score_board(newwin(MAX_HEIGHT - 10, 40, 5, 5));
     box(score_board, 0,0);
     wrefresh(score_board);
+	/* COLS & LINES variables are set during ncurses initscr(). */
     offset_x = COLS / 10;
 	offset_y = LINES / 20;
-	set_game_board(newwin(MAX_HEIGHT - 10, MAX_WIDTH - 50, 5 , 45));
+	set_game_board(newwin(MAX_HEIGHT - 10, MAX_WIDTH - 50, 5, 45));
 	nodelay(stdscr, TRUE); // Allows getch() to be non-blocking and not pause on user input.
 	box(game_board, 0, 0);
 	wrefresh(game_board);
