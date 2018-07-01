@@ -11,15 +11,24 @@ class GameEntity{
         int health;
 
     public:
+        GameEntity();
+        ~GameEntity();
+        GameEntity& operator=(GameEntity const & rhs);
+        GameEntity(GameEntity const & copy);
         virtual void move() = 0;
         virtual void die();
         virtual void kill(GameEntity &entity);
         virtual void shoot() = 0;
 
-        virtual int getX();
-        virtual int getY();
+        virtual int getX() const;
+        virtual int getY() const;
         virtual void setX(int x);
         virtual void setY(int y);
+
+        virtual EntityType getType() const;
+        virtual void setType(EntityType type);
+        virtual int getHealth() const;
+        virtual void setHealth(int y);
 };
 
 #endif
