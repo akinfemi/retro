@@ -4,11 +4,14 @@
 #include <ncurses.h>
 #include <panel.h>
 #include <iostream>
+#include "Player.hpp"
 
 class Game{
     private:
         WINDOW *score_board;
         WINDOW *game_board;
+		Player *player1;		
+		
     
     public:
         Game();

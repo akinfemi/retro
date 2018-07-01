@@ -2,6 +2,8 @@
 
 Game::Game()
 {
+	std::cout << "Game is starting..." << std::endl;
+	player1 = new Player();
 	init_screen();
 }
 
@@ -23,7 +25,7 @@ Game& Game::operator=(Game const &rhs)
 
 void Game::update_screen()
 {
-
+	refresh();
 }
 
 void Game::init_screen()
@@ -47,33 +49,34 @@ void Game::add_enemies()
 #define WORLD_HEIGHT 20
 void Game::run()
 {
-
-	WINDOW *retro_world;
-	keypad(stdscr, TRUE); // Fixes arrow keys (UP, DOWN, LEFT, RIGHT) getting mixed with Escape character
 	int offset_x, offset_y, max_x, max_y;
-	printw("Press escape key to exit.");
 	refresh();
 
-	// COLS & LINES are filled in during initscr().
+	/* COLS & LINES variables are set during initscr(). */
 	offset_x = (COLS - WORLD_WIDTH) / 2;
 	offset_y = (LINES - WORLD_HEIGHT) / 2;
 
-	retro_world = newwin(WORLD_HEIGHT,
-			WORLD_WIDTH,
-			offset_y,
-			offset_x);
+	game_board = newwin(WORLD_HEIGHT, WORLD_WIDTH, offset_y, offset_x);
+	nodelay(stdscr, TRUE); // Allows getch() to be non-blocking and not pause on user input.
+	keypad(stdscr, TRUE); // Fixes arrow keys (UP, DOWN, LEFT, RIGHT) getting mixed with Escape character
+	box(game_board, 0, 0);
+	wrefresh(game_board);
 
-	box(retro_world, 0, 0);
-	wrefresh(retro_world);
-
-	/*
-	https://www.gnu.org/software/guile-ncurses/manual/html_node/Getting-characters-from-the-keyboard.html
-	*/
+	/* Game loop */
 	while (1) {
 		int keyPress = getch();
-		if (keyPress == 27) { // Escape key
+		if (keyPress == 'X' or keyPress == 'x') {
 			return;
 		}
+		else if (keyPress == KEY_UP ||
+				keyPress == KEY_DOWN ||
+				keyPress == KEY_RIGHT ||
+				keyPress == KEY_LEFT)
+		{
+			printw("Keypress detected.");
+		}
+		else
+			update_screen();
 	}
 }
 
