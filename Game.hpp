@@ -5,6 +5,8 @@
 #include "Player.hpp"
 #include "Enemy.hpp"
 #include "Bullet.hpp"
+#include <panel.h>
+#include <iostream>
 
 class Game{
     private:
