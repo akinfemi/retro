@@ -11,6 +11,7 @@ class GameEntity{
         int health;
 
     public:
+        bool alive;
         GameEntity();
         ~GameEntity();
         GameEntity& operator=(GameEntity const & rhs);
@@ -19,6 +20,7 @@ class GameEntity{
         virtual void die();
         virtual void kill(GameEntity &entity);
         virtual void shoot() = 0;
+        virtual void draw() = 0;
 
         virtual int getX() const;
         virtual int getY() const;

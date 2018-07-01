@@ -13,8 +13,10 @@ class Enemy : public GameEntity {
         Enemy& operator=(Enemy const & rhs);
         Enemy(Enemy const & copy);
 
-        //Bonus functions
-        void shoot();
         void move();
+        void draw();
+
+        //Bonus function
+        void shoot();
 };
 #endif
