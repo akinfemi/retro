@@ -1,11 +1,39 @@
 #include "Game.hpp"
 
+#define MAX_WIDTH 156
+#define MAX_HEIGHT 47
+#define SPACE 32
+#define N_ROWS 4
+
 Game::Game()
 {
 	std::cout << "Game is starting..." << std::endl;
-    this->num_bullets = NUM_BULLETS;
-    this->num_enemies = 16;
+
     init_screen();
+
+    keypad(stdscr, TRUE); // Fixes arrow keys (UP, DOWN, LEFT, RIGHT) getting mixed with Escape character
+	int offset_x, offset_y;//, max_x, max_y;
+
+	/* COLS & LINES variables are set during ncurses initscr(). */
+    offset_x = COLS / 10;
+	offset_y = LINES / 20;
+	set_game_board(newwin(MAX_HEIGHT - 10, MAX_WIDTH - 50, 5, 45));
+	nodelay(stdscr, TRUE); // Allows getch() to be non-blocking and not pause on user input.
+
+    set_score_board(newwin(MAX_HEIGHT - 10, 40, 5, 5));
+    box(score_board, 0,0);
+    wrefresh(score_board);
+
+    this->num_bullets = NUM_BULLETS;
+    this->num_enemies = 96;
+
+    Player *plyr = new Player();
+    plyr->setX((MAX_WIDTH / 2) - 27);
+    plyr->setY(MAX_HEIGHT - 13);
+    plyr->alive = true;
+    this->set_player(plyr);
+
+    std::cout << "Game is starting..." << std::endl;
 }
 
 Game::~Game(){
@@ -112,18 +140,22 @@ void Game::update_screen(){
 	}
 }
 
-void Game::set_player(Player & player){
-    this->plyr = &player;
+void Game::set_player(Player * player){
+    this->plyr = player;
 }
 
 void Game::add_enemies(Enemy ** enemies){
-    int x = 1;
-    int y = 1;
-    for (int i = 0; i < this->get_num_enemies(); i++){
-        enemies[i] = new Enemy();
-        enemies[i]->setX( x * i );
-        enemies[i]->setY( y * i );
-        x += 4;
+    int i = 0;
+    for (int j = 0; j < N_ROWS; j++){
+        int x = 5;
+        int y = 1 + (3 * j);
+        for (int k = 0; k < this->get_num_enemies() / N_ROWS; k++){
+            enemies[i] = new Enemy();
+            enemies[i]->setX( x );
+            enemies[i]->setY( y );
+            x += 4;
+            i++;
+        }
     }
     this->enemies = enemies;
 }
@@ -134,32 +166,16 @@ void Game::init_screen()
 	noecho(); // Don't echo any keypresses
 	curs_set(FALSE); // Don't display a cursor
 	printw("Press x key to exit.");
-	for (int i = 0; i < this->get_num_bullets(); i++)
-	{
-		bullets[i].setX(78);
-		bullets[i].setY(10);
-	}
+	// for (int i = 0; i < this->get_num_bullets(); i++)
+	// {
+	// 	bullets[i].setX(78);
+	// 	bullets[i].setY(10);
+	// }
 	refresh();
 }
 
-#define MAX_WIDTH 156
-#define MAX_HEIGHT 47
-#define SPACE 32
 void Game::run()
 {
-	keypad(stdscr, TRUE); // Fixes arrow keys (UP, DOWN, LEFT, RIGHT) getting mixed with Escape character
-	int offset_x, offset_y;//, max_x, max_y;
-    set_score_board(newwin(MAX_HEIGHT - 10, 40, 5, 5));
-    box(score_board, 0,0);
-    wrefresh(score_board);
-	/* COLS & LINES variables are set during ncurses initscr(). */
-    offset_x = COLS / 10;
-	offset_y = LINES / 20;
-	set_game_board(newwin(MAX_HEIGHT - 10, MAX_WIDTH - 50, 5, 45));
-	nodelay(stdscr, TRUE); // Allows getch() to be non-blocking and not pause on user input.
-	box(game_board, 0, 0);
-	wrefresh(game_board);
-
 	/* Game loop */
 	while (this->get_player()->alive) {
         

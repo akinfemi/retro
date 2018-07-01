@@ -50,7 +50,7 @@ class Game{
 
         void update_screen();
         void init_screen();
-        void set_player(Player& player);
+        void set_player(Player * player);
         void add_enemies(Enemy **enemies);
         void run();
         void clean();

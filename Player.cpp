@@ -7,6 +7,7 @@
 Player::Player(){
     this->alive = true;
     this->type = PLAYER;
+
     setX(MAX_WIDTH / 2);
     setY(MAX_HEIGHT / 2);
 }
