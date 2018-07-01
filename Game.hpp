@@ -2,6 +2,7 @@
 # define GAME_H
 
 #include <ncurses.h>
+#include <iostream>
 
 class Game{
     private:
@@ -17,6 +18,7 @@ class Game{
         void update_screen();
         void init_screen();
         void add_player();
+		void add_enemies();
         void run();
         void clean();
 };
