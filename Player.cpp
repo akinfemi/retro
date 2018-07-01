@@ -1,9 +1,14 @@
 #include "Player.hpp"
 #include <string>
 
+#define MAX_WIDTH 156
+#define MAX_HEIGHT 47
+
 Player::Player(){
     this->alive = true;
     this->type = PLAYER;
+    setX(MAX_WIDTH / 2);
+    setY(MAX_HEIGHT / 2);
 }
 
 Player::~Player(){}
@@ -19,11 +24,22 @@ Player& Player::operator=(Player const & rhs){
 
 void Player::draw(WINDOW *win){
     //#TODO
-    const char * image = " ^ \nxox\n";
+    const char * top = "_^_";
+    const char *bottom = "xox";
     int x,y;
 
-    getyx(win, y, x);
-    mvwaddstr(win, y/2, x/2, image);
+    x = this->getX();
+    y = this->getY();
+    for (int i = 0; i < 3; i ++){
+        mvwaddch(win,y, x-1,top[i]);
+        x++;
+    }
+    x = this->getX();
+    y = this->getY();
+    for (int i = 0; i < 3; i ++){
+        mvwaddch(win,y+1, x-1,bottom[i]);
+        x++;
+    }
     wrefresh(win);
 }
 

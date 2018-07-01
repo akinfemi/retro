@@ -20,7 +20,7 @@ class GameEntity{
         ~GameEntity();
         GameEntity& operator=(GameEntity const & rhs);
         GameEntity(GameEntity const & copy);
-        virtual void move(Direction dir, Speed spd);
+        virtual void move_entity(Direction dir, Speed spd);
         virtual void die();
         virtual void kill(GameEntity &entity);
         virtual void shoot(WINDOW *win) = 0;

@@ -16,7 +16,7 @@ GameEntity& GameEntity::operator=(GameEntity const & rhs) {
     return (*this);
 }
 
-void GameEntity::move(Direction dir, Speed spd){
+void GameEntity::move_entity(Direction dir, Speed spd){
     if (dir == UP){
         this->setY(this->getY() - (1 * spd));
     }else if (dir == LEFT){

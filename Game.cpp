@@ -177,7 +177,7 @@ void Game::action(int key){
     }else //move
     {
         dir = (Direction)(KEY_UP - key);
-        this->get_player()->move(dir, NORMAL);
+        this->get_player()->move_entity(dir, NORMAL);
     }
 }
 
