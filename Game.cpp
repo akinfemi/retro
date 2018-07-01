@@ -91,6 +91,7 @@ int Game::get_num_bullets() const {
 }
 
 void Game::update_screen(){
+    wclear(game_board);
     Enemy * enemies;
 
     enemies = get_enemies();
@@ -144,7 +145,7 @@ void Game::run()
 	offset_y = LINES / 20;
 	set_game_board(newwin(MAX_HEIGHT - 10, MAX_WIDTH - 50, 5 , 45));
 	nodelay(stdscr, TRUE); // Allows getch() to be non-blocking and not pause on user input.
-	box(game_board, 0, 0);
+	box(game_board, -1, -1);
 	wrefresh(game_board);
 
 	/* Game loop */
@@ -160,11 +161,12 @@ void Game::run()
 				keyPress == KEY_LEFT ||
                 keyPress == ' ')
 		{
-			printw("Keypress detected.");
             action(keyPress);
 		}
 		else{
 			update_screen();
+            box(game_board, 0, 0);
+            wrefresh(game_board);
         }
 	}
 }
@@ -175,7 +177,7 @@ void Game::action(int key){
         this->get_player()->shoot(game_board);
     }else //move
     {
-        dir = (Direction)(KEY_UP - key);
+        dir = (Direction)(KEY_RIGHT - key);
         this->get_player()->move_entity(dir, NORMAL);
     }
 }
