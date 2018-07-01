@@ -40,6 +40,9 @@ void Game::init_screen()
 
 	score_board = newwin(10, 40, 2, 5);
 	game_board = newwin(10, 40, 4, 6);
+	getch();
+	endwin();
+
 }
 
 void Game::add_player()
