@@ -51,7 +51,7 @@ int Game::get_game_board_height() const{
     return this->game_board_height;
 }
 
-Player Game::get_player() const{
+Player * Game::get_player() const{
     return this->plyr;
 }
 
@@ -100,8 +100,8 @@ void Game::update_screen(){
         }
     }
 
-    if (this->get_player().alive)
-        this->get_player().draw(this->get_game_board());
+    if (this->get_player()->alive)
+        this->get_player()->draw(this->get_game_board());
     
     // for (int i = 0; i < this->get_num_bullets(); i++){
     //     if (bullets[i].getX() && bullets[i].getY()){ //#TODO: If bullet is out of window
@@ -114,7 +114,7 @@ void Game::update_screen(){
 }
 
 void Game::set_player(Player & player){
-    this->plyr = player;
+    this->plyr = &player;
 }
 
 void Game::add_enemies(Enemy * enemies){
@@ -149,7 +149,7 @@ void Game::run()
 	wrefresh(game_board);
 
 	/* Game loop */
-	while (this->plyr.alive) {
+	while (this->get_player()->alive) {
         
 		int keyPress = getch();
 		if (keyPress == 'X' or keyPress == 'x') {
@@ -173,11 +173,11 @@ void Game::run()
 void Game::action(int key){
     Direction dir;
     if (key == SPACE){
-        this->plyr.shoot(game_board);
+        this->get_player()->shoot(game_board);
     }else //move
     {
         dir = (Direction)(KEY_UP - key);
-        this->plyr.move(dir, NORMAL);
+        this->get_player()->move(dir, NORMAL);
     }
 }
 
