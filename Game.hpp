@@ -2,6 +2,7 @@
 # define GAME_H
 
 #include <ncurses.h>
+#include <panel.h>
 #include <iostream>
 
 class Game{

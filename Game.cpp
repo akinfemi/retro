@@ -28,21 +28,10 @@ void Game::update_screen()
 
 void Game::init_screen()
 {
-	int y, x = 0;
 	initscr(); // Initialize the window
 	noecho(); // Don't echo any keypresses
 	curs_set(FALSE); // Don't display a cursor
-
-	/*
-	https://linux.die.net/man/3/getmaxyx
-	*/
-	getmaxyx(stdscr, y, x); // Global var 'stdscr' is created by the call to `initscr()`
-
-	score_board = newwin(10, 40, 2, 5);
-	game_board = newwin(10, 40, 4, 6);
-	getch();
-	endwin();
-
+	refresh();
 }
 
 void Game::add_player()
@@ -54,12 +43,39 @@ void Game::add_enemies()
 {
 }
 
+#define WORLD_WIDTH 50
+#define WORLD_HEIGHT 20
 void Game::run()
 {
 
+	WINDOW *retro_world;
+	int offset_x, offset_y, max_x, max_y;
+	printw("Press escape key to exit.");
+	refresh();
+	// COLS & LINES are filled in during initscr().
+	offset_x = (COLS - WORLD_WIDTH) / 2;
+	offset_y = (LINES - WORLD_HEIGHT) / 2;
+
+	retro_world = newwin(WORLD_HEIGHT,
+			WORLD_WIDTH,
+			offset_y,
+			offset_x);
+
+	box(retro_world, 0, 0);
+	wrefresh(retro_world);
+
+	/*
+	https://www.gnu.org/software/guile-ncurses/manual/html_node/Getting-characters-from-the-keyboard.html
+	*/
+	while (1) {
+		int keyPress = getch();
+		if (keyPress == 27) { // Escape key
+			return;
+		}
+	}
 }
 
 void Game::clean()
 {
-
+	endwin();
 }
