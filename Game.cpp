@@ -110,6 +110,8 @@ void Game::update_screen(){
     for (int i = 0; i < this->get_num_bullets(); i++){
             bullets[i].draw(game_board);
 	}
+
+	checkCollisions();
 }
 
 void Game::set_player(Player & player){
@@ -191,6 +193,14 @@ void Game::action(int key){
     {
         dir = (Direction)(KEY_RIGHT - key);
         this->get_player()->move_entity(dir, NORMAL);
+    }
+}
+
+void Game::checkCollisions(){
+    for (int i = 0; i < this->get_num_enemies(); i++){
+		if (std::abs(this->plyr->getX() - this->get_enemies()[i]->getX()) <= 2 &&
+				std::abs(this->plyr->getY() - this->get_enemies()[i]->getY()) <= 1)
+			this->plyr->alive = false;
     }
 }
 

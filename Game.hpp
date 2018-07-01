@@ -41,6 +41,7 @@ class Game{
         int get_num_enemies() const;
         void set_num_enemies(int n);
         void set_bullet_burst(int n);
+		void checkCollisions();
 
         void add_bullet(Bullet& bullet);
         Bullet *get_bullets();
