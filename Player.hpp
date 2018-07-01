@@ -14,8 +14,8 @@ class Player : public GameEntity {
         Player(Player const & copy);
 
         //overide
-        void shoot();
-        void draw();
+        void shoot(WINDOW *win);
+        void draw(WINDOW *win);
 };
 
 #endif

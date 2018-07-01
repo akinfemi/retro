@@ -13,6 +13,8 @@ class Game{
     private:
         WINDOW *score_board;
         WINDOW *game_board;
+        int game_board_width;
+        int game_board_height;
         int num_enemies;
         int num_bullets;
         Player plyr;
@@ -29,6 +31,8 @@ class Game{
         void set_game_board(WINDOW * gm_b);
         WINDOW* get_score_board() const;
         WINDOW* get_game_board() const;
+        int get_game_board_width() const;
+        int get_game_board_height() const;
 
         Player get_player() const;
         Enemy * get_enemies() const;

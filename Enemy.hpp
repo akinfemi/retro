@@ -1,7 +1,7 @@
 #ifndef ENEMY_H
 # define ENEMY_H
 #include "GameEntity.hpp"
-
+#include <ncurses.h>
 class Enemy : public GameEntity {
     private:
         EntityType type;
@@ -13,10 +13,10 @@ class Enemy : public GameEntity {
         Enemy& operator=(Enemy const & rhs);
         Enemy(Enemy const & copy);
 
-        void draw();
+        void draw(WINDOW *win);
 
         int get_bullets_to_kill() const;
         //Bonus function
-        void shoot();
+        void shoot(WINDOW *win);
 };
 #endif

@@ -1,6 +1,8 @@
 #ifndef GAME_ENTITY_H
 # define GAME_ENTITY_H
 
+#include <ncurses.h>
+
 enum EntityType {ENEMY = 1, PLAYER, BULLET};
 enum Direction {UP, DOWN, LEFT, RIGHT};
 enum Speed {NORMAL = 1, FAST, SUPER_FAST};
@@ -21,8 +23,8 @@ class GameEntity{
         virtual void move(Direction dir, Speed spd);
         virtual void die();
         virtual void kill(GameEntity &entity);
-        virtual void shoot() = 0;
-        virtual void draw() = 0;
+        virtual void shoot(WINDOW *win) = 0;
+        virtual void draw(WINDOW *win) = 0;
 
         virtual int getX() const;
         virtual int getY() const;

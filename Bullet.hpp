@@ -1,10 +1,12 @@
 #ifndef BULLET_H
 # define BULLET_H
 #include "GameEntity.hpp"
+#include <ncurses.h>
 
 class Bullet : public GameEntity {
     private:
         EntityType type;
+        void shoot(WINDOW *win); //override just to make it a concrete class
 
     public:
         Bullet();
@@ -12,8 +14,7 @@ class Bullet : public GameEntity {
         Bullet& operator=(Bullet const & rhs);
         Bullet(Bullet const & copy);
 
-        void draw();
-        void shoot(); //override just to make it a concrete class
+        void draw(WINDOW *win);
 };
 
 #endif

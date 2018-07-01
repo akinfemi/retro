@@ -3,8 +3,7 @@
 Game::Game()
 {
 	std::cout << "Game is starting..." << std::endl;
-	init_screen();
-    this->num_bullets = 1;
+    this->num_bullets = 4;
     this->num_enemies = 16;
     init_screen();
 }
@@ -24,6 +23,8 @@ Game& Game::operator=(Game const & rhs){
     this->enemies = rhs.get_enemies();
     this->num_enemies = rhs.get_num_enemies();
     this->num_bullets = rhs.get_num_bullets();
+    this->game_board_width = get_game_board_width();
+    this->game_board_height = get_game_board_height();
     return (*this);
 }
 
@@ -41,6 +42,13 @@ WINDOW* Game::get_score_board() const{
 
 WINDOW* Game::get_game_board() const{
     return this->game_board;
+}
+
+int Game::get_game_board_width() const{
+    return this->game_board_width;
+}
+int Game::get_game_board_height() const{
+    return this->game_board_height;
 }
 
 Player Game::get_player() const{
@@ -88,21 +96,21 @@ void Game::update_screen(){
     enemies = get_enemies();
     for (int i = 0; i < this->get_num_enemies(); i++){
         if (enemies[i].alive){
-            enemies[i].draw();
+            enemies[i].draw(this->get_game_board());
         }
     }
 
     if (this->get_player().alive)
-        this->get_player().draw();
+        this->get_player().draw(this->get_game_board());
     
-    for (int i = 0; i < this->get_num_bullets(); i++){
-        if (bullets[i].getX() && bullets[i].getY()){ //#TODO: If bullet is out of window
-            bullets[i].alive = false;
-        }
-        if (bullets[i].alive){
-            bullets[i].draw();
-        }
-    }
+    // for (int i = 0; i < this->get_num_bullets(); i++){
+    //     if (bullets[i].getX() && bullets[i].getY()){ //#TODO: If bullet is out of window
+    //         bullets[i].alive = false;
+    //     }
+    //     if (bullets[i].alive){
+    //         bullets[i].draw();
+    //     }
+    // }
 }
 
 void Game::set_player(Player & player){
@@ -118,6 +126,7 @@ void Game::init_screen()
 	initscr(); // Initialize the window
 	noecho(); // Don't echo any keypresses
 	curs_set(FALSE); // Don't display a cursor
+	printw("Press x key to exit.");
 	refresh();
 }
 
@@ -126,15 +135,21 @@ void Game::init_screen()
 void Game::run()
 {
 	keypad(stdscr, TRUE); // Fixes arrow keys (UP, DOWN, LEFT, RIGHT) getting mixed with Escape character
-	int offset_x, offset_y;
-	printw("Press escape key to exit.");
-	refresh();
+	int offset_x, offset_y, max_x, max_y;
+
+    getmaxyx(stdscr, max_x, max_y);
 
 	/* COLS & LINES variables are set during initscr(). */
-	offset_x = (COLS - WORLD_WIDTH) / 2;
-	offset_y = (LINES - WORLD_HEIGHT) / 2;
+    // offset_x = (COLS - WORLD_WIDTH) / 4;
+	// offset_y = (LINES - WORLD_HEIGHT) / 4;
+	// set_score_board(newwin(WORLD_HEIGHT, WORLD_WIDTH, offset_y, offset_x));
 
-	set_game_board(newwin(WORLD_HEIGHT, WORLD_WIDTH, offset_y, offset_x));
+	// offset_x = (COLS - WORLD_WIDTH) / 2;
+	// offset_y = (LINES - WORLD_HEIGHT) / 2;
+    // set_game_board(newwin(WORLD_HEIGHT, WORLD_WIDTH, offset_y, offset_x));
+    offset_x = COLS / 10;
+	offset_y = LINES / 20;
+	set_game_board(newwin(max_x - 10, max_y - 5, 5 , 2));
 	// Save this just in case: timeout(100);
 	nodelay(stdscr, TRUE); // Allows getch() to be non-blocking and not pause on user input.
 	keypad(stdscr, TRUE); // Fixes arrow keys (UP, DOWN, LEFT, RIGHT) getting mixed with Escape character
@@ -142,7 +157,8 @@ void Game::run()
 	wrefresh(game_board);
 
 	/* Game loop */
-	while (1) {
+	while (this->plyr.alive) {
+        
 		int keyPress = getch();
 		if (keyPress == 'X' or keyPress == 'x') {
 			return;

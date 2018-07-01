@@ -18,10 +18,12 @@ int Enemy::get_bullets_to_kill() const{
     return this->bullets_to_kill;
 }
 
-void Enemy::draw(){
+void Enemy::draw(WINDOW *win){
     //#TODO
+    (void)win;
 }
 
-void Enemy::shoot(){
+void Enemy::shoot(WINDOW *win){
     //#TODO
+    (void)win;
 }

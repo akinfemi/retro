@@ -1,6 +1,10 @@
 #include "Player.hpp"
+#include <string>
 
-Player::Player(){}
+Player::Player(){
+    this->alive = true;
+    this->type = PLAYER;
+}
 
 Player::~Player(){}
 
@@ -13,10 +17,17 @@ Player& Player::operator=(Player const & rhs){
     return (*this);
 }
 
-void Player::draw(){
+void Player::draw(WINDOW *win){
     //#TODO
+    const char * image = " ^ \nxox\n";
+    int x,y;
+
+    getyx(win, y, x);
+    mvwaddstr(win, y, x, image);
+    wrefresh(win);
 }
 
-void Player::shoot(){
+void Player::shoot(WINDOW *win){
     //#TODO
+    (void)win;
 }
