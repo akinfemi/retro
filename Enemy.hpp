@@ -15,8 +15,8 @@ class Enemy : public GameEntity {
 
         void draw(WINDOW *win);
 
-        int get_bullets_to_kill() const;
         //Bonus function
+        int get_bullets_to_kill() const;
         void shoot(WINDOW *win);
 };
 #endif
