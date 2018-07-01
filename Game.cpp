@@ -132,6 +132,7 @@ void Game::init_screen()
 
 #define MAX_WIDTH 156
 #define MAX_HEIGHT 47
+#define SPACE 32
 void Game::run()
 {
 	keypad(stdscr, TRUE); // Fixes arrow keys (UP, DOWN, LEFT, RIGHT) getting mixed with Escape character
@@ -157,13 +158,27 @@ void Game::run()
 		else if (keyPress == KEY_UP ||
 				keyPress == KEY_DOWN ||
 				keyPress == KEY_RIGHT ||
-				keyPress == KEY_LEFT)
+				keyPress == KEY_LEFT ||
+                keyPress == ' ')
 		{
 			printw("Keypress detected.");
+            action(keyPress);
 		}
-		else
+		else{
 			update_screen();
+        }
 	}
+}
+
+void Game::action(int key){
+    Direction dir;
+    if (key == SPACE){
+        this->plyr.shoot(game_board);
+    }else //move
+    {
+        dir = (Direction)(KEY_UP - key);
+        this->plyr.move(dir, NORMAL);
+    }
 }
 
 void Game::clean()
