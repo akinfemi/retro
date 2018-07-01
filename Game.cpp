@@ -124,9 +124,11 @@ void Game::run()
 {
 
 	WINDOW *retro_world;
+	keypad(stdscr, TRUE); // Fixes arrow keys (UP, DOWN, LEFT, RIGHT) getting mixed with Escape character
 	int offset_x, offset_y, max_x, max_y;
 	printw("Press escape key to exit.");
 	refresh();
+
 	// COLS & LINES are filled in during initscr().
 	offset_x = (COLS - WORLD_WIDTH) / 2;
 	offset_y = (LINES - WORLD_HEIGHT) / 2;
