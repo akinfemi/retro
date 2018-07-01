@@ -4,7 +4,7 @@
 #include <ncurses.h>
 
 enum EntityType {ENEMY = 1, PLAYER, BULLET};
-enum Direction {UP, DOWN, RIGHT, LEFT};
+enum Direction {RIGHT, LEFT, UP, DOWN};
 enum Speed {NORMAL = 1, FAST, SUPER_FAST};
 
 class GameEntity{
