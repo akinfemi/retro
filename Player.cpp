@@ -23,7 +23,7 @@ void Player::draw(WINDOW *win){
     int x,y;
 
     getyx(win, y, x);
-    mvwaddstr(win, y, x, image);
+    mvwaddstr(win, y/2, x/2, image);
     wrefresh(win);
 }
 

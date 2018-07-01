@@ -130,26 +130,25 @@ void Game::init_screen()
 	refresh();
 }
 
-#define WORLD_WIDTH 50
-#define WORLD_HEIGHT 20
+#define MAX_WIDTH 156
+#define MAX_HEIGHT 47
 void Game::run()
 {
 	keypad(stdscr, TRUE); // Fixes arrow keys (UP, DOWN, LEFT, RIGHT) getting mixed with Escape character
-	int offset_x, offset_y, max_x, max_y;
+	int offset_x, offset_y;//, max_x, max_y;
 
-    getmaxyx(stdscr, max_x, max_y);
+    // getmaxyx(stdscr, max_x, max_y);
 
 	/* COLS & LINES variables are set during initscr(). */
-    // offset_x = (COLS - WORLD_WIDTH) / 4;
-	// offset_y = (LINES - WORLD_HEIGHT) / 4;
-	// set_score_board(newwin(WORLD_HEIGHT, WORLD_WIDTH, offset_y, offset_x));
-
-	// offset_x = (COLS - WORLD_WIDTH) / 2;
+    // offset_x = (COLS - WORLD_WIDTH) / 2;
 	// offset_y = (LINES - WORLD_HEIGHT) / 2;
-    // set_game_board(newwin(WORLD_HEIGHT, WORLD_WIDTH, offset_y, offset_x));
+
+    set_score_board(newwin(MAX_HEIGHT - 10, 40, 5, 5));
+    box(score_board, 0,0);
+    wrefresh(score_board);
     offset_x = COLS / 10;
 	offset_y = LINES / 20;
-	set_game_board(newwin(max_x - 10, max_y - 5, 5 , 2));
+	set_game_board(newwin(MAX_HEIGHT - 10, MAX_WIDTH - 50, 5 , 45));
 	// Save this just in case: timeout(100);
 	nodelay(stdscr, TRUE); // Allows getch() to be non-blocking and not pause on user input.
 	keypad(stdscr, TRUE); // Fixes arrow keys (UP, DOWN, LEFT, RIGHT) getting mixed with Escape character
@@ -177,5 +176,7 @@ void Game::run()
 
 void Game::clean()
 {
+    delwin(score_board);
+    delwin(game_board);
 	endwin();
 }
