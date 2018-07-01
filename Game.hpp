@@ -20,7 +20,7 @@ class Game{
         int num_enemies;
         int num_bullets;
         Player * plyr;
-        Enemy *enemies;
+        Enemy **enemies;
         Bullet bullets[NUM_BULLETS];
     
     public:
@@ -37,7 +37,7 @@ class Game{
         int get_game_board_height() const;
 
         Player * get_player() const;
-        Enemy * get_enemies() const;
+        Enemy ** get_enemies() const;
         int get_num_enemies() const;
         void set_num_enemies(int n);
         void set_bullet_burst(int n);
@@ -51,7 +51,7 @@ class Game{
         void update_screen();
         void init_screen();
         void set_player(Player& player);
-        void add_enemies(Enemy *enemies);
+        void add_enemies(Enemy **enemies);
         void run();
         void clean();
 };

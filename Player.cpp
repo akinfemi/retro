@@ -23,7 +23,6 @@ Player& Player::operator=(Player const & rhs){
 }
 
 void Player::draw(WINDOW *win){
-    //#TODO
     const char * top = "_^_";
     const char *bottom = "xox";
     int x,y;
@@ -37,10 +36,9 @@ void Player::draw(WINDOW *win){
     x = this->getX();
     y = this->getY();
     for (int i = 0; i < 3; i ++){
-        mvwaddch(win,y+1, x-1,bottom[i]);
+        mvwaddch(win,y+1, x-1, bottom[i]);
         x++;
     }
-    wrefresh(win);
 }
 
 void Player::shoot(WINDOW *win){

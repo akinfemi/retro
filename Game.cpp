@@ -55,7 +55,7 @@ Player * Game::get_player() const{
     return this->plyr;
 }
 
-Enemy * Game::get_enemies() const{
+Enemy ** Game::get_enemies() const{
     return this->enemies;
 }
 
@@ -95,12 +95,12 @@ int Game::get_num_bullets() const {
 
 void Game::update_screen(){
     wclear(game_board);
-    Enemy * enemies;
+    Enemy ** enemies;
 
     enemies = get_enemies();
     for (int i = 0; i < this->get_num_enemies(); i++){
-        if (enemies[i].alive){
-            enemies[i].draw(this->get_game_board());
+        if (enemies && enemies[i] && enemies[i]->alive){
+            enemies[i]->draw(this->get_game_board());
         }
     }
 
@@ -116,7 +116,15 @@ void Game::set_player(Player & player){
     this->plyr = &player;
 }
 
-void Game::add_enemies(Enemy * enemies){
+void Game::add_enemies(Enemy ** enemies){
+    int x = 1;
+    int y = 1;
+    for (int i = 0; i < this->get_num_enemies(); i++){
+        enemies[i] = new Enemy();
+        enemies[i]->setX( x * i );
+        enemies[i]->setY( y * i );
+        x += 4;
+    }
     this->enemies = enemies;
 }
 
@@ -149,7 +157,7 @@ void Game::run()
 	offset_y = LINES / 20;
 	set_game_board(newwin(MAX_HEIGHT - 10, MAX_WIDTH - 50, 5, 45));
 	nodelay(stdscr, TRUE); // Allows getch() to be non-blocking and not pause on user input.
-	box(game_board, -1, -1);
+	box(game_board, 0, 0);
 	wrefresh(game_board);
 
 	/* Game loop */

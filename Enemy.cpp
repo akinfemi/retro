@@ -1,6 +1,9 @@
 #include "Enemy.hpp"
 
-Enemy::Enemy(){}
+Enemy::Enemy(){
+    this->alive = true;
+    this->setHealth(1);
+}
 
 Enemy::~Enemy(){}
 
@@ -20,7 +23,23 @@ int Enemy::get_bullets_to_kill() const{
 
 void Enemy::draw(WINDOW *win){
     //#TODO
-    (void)win;
+    const char * top = "xox";
+    const char * bottom = "@@@";
+    int x,y;
+
+    x = this->getX();
+    y = this->getY();
+    // printw("%i, %i", x,y);
+    for (int i = 0; i < 3; i ++){
+        mvwaddch(win,y, x-1, top[i]);
+        x++;
+    }
+    x = this->getX();
+    y = this->getY();
+    for (int i = 0; i < 3; i ++){
+        mvwaddch(win,y+1, x-1,bottom[i]);
+        x++;
+    }
 }
 
 void Enemy::shoot(WINDOW *win){
