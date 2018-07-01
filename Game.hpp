@@ -44,6 +44,8 @@ class Game{
         Bullet *get_bullets();
         int get_num_bullets() const;
 
+        void action(int key);
+
         void update_screen();
         void init_screen();
         void set_player(Player& player);
