@@ -3,7 +3,7 @@
 Game::Game()
 {
 	std::cout << "Game is starting..." << std::endl;
-    this->num_bullets = 4;
+    this->num_bullets = NUM_BULLETS;
     this->num_enemies = 16;
     init_screen();
 }
@@ -77,6 +77,9 @@ void Game::add_bullet(Bullet &bullet){
         if (bullets[i].alive == false){
             bullets[i].setX(bullet.getX());
             bullets[i].setY(bullet.getY());
+
+            bullets[i].setX(50);
+            bullets[i].setY(50);
             bullets[i].alive = true;
         }
     }
@@ -104,14 +107,9 @@ void Game::update_screen(){
     if (this->get_player()->alive)
         this->get_player()->draw(this->get_game_board());
     
-    // for (int i = 0; i < this->get_num_bullets(); i++){
-    //     if (bullets[i].getX() && bullets[i].getY()){ //#TODO: If bullet is out of window
-    //         bullets[i].alive = false;
-    //     }
-    //     if (bullets[i].alive){
-    //         bullets[i].draw();
-    //     }
-    // }
+    for (int i = 0; i < this->get_num_bullets(); i++){
+            bullets[i].draw(game_board);
+	}
 }
 
 void Game::set_player(Player & player){
@@ -128,6 +126,11 @@ void Game::init_screen()
 	noecho(); // Don't echo any keypresses
 	curs_set(FALSE); // Don't display a cursor
 	printw("Press x key to exit.");
+	for (int i = 0; i < this->get_num_bullets(); i++)
+	{
+		bullets[i].setX(78);
+		bullets[i].setY(10);
+	}
 	refresh();
 }
 

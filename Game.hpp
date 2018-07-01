@@ -9,6 +9,8 @@
 #include <iostream>
 #include "Player.hpp"
 
+#define NUM_BULLETS 4
+
 class Game{
     private:
         WINDOW *score_board;
@@ -19,7 +21,7 @@ class Game{
         int num_bullets;
         Player * plyr;
         Enemy *enemies;
-        Bullet * bullets;
+        Bullet bullets[NUM_BULLETS];
     
     public:
         Game();

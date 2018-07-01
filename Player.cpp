@@ -45,5 +45,6 @@ void Player::draw(WINDOW *win){
 
 void Player::shoot(WINDOW *win){
     //#TODO
+	
     (void)win;
 }

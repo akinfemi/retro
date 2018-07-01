@@ -14,8 +14,12 @@ Bullet& Bullet::operator=(Bullet const & rhs){
 }
 
 void Bullet::draw(WINDOW *win){
-    //#TODO
-    (void)win;
+    int x,y;
+
+    x = this->getX();
+    y = this->getY();
+	mvwaddch(win, y, x, 'o');
+    wrefresh(win);
 }
 
 void Bullet::shoot(WINDOW *win){
