@@ -136,22 +136,13 @@ void Game::run()
 {
 	keypad(stdscr, TRUE); // Fixes arrow keys (UP, DOWN, LEFT, RIGHT) getting mixed with Escape character
 	int offset_x, offset_y;//, max_x, max_y;
-
-    // getmaxyx(stdscr, max_x, max_y);
-
-	/* COLS & LINES variables are set during initscr(). */
-    // offset_x = (COLS - WORLD_WIDTH) / 2;
-	// offset_y = (LINES - WORLD_HEIGHT) / 2;
-
     set_score_board(newwin(MAX_HEIGHT - 10, 40, 5, 5));
     box(score_board, 0,0);
     wrefresh(score_board);
     offset_x = COLS / 10;
 	offset_y = LINES / 20;
 	set_game_board(newwin(MAX_HEIGHT - 10, MAX_WIDTH - 50, 5 , 45));
-	// Save this just in case: timeout(100);
 	nodelay(stdscr, TRUE); // Allows getch() to be non-blocking and not pause on user input.
-	keypad(stdscr, TRUE); // Fixes arrow keys (UP, DOWN, LEFT, RIGHT) getting mixed with Escape character
 	box(game_board, 0, 0);
 	wrefresh(game_board);
 
