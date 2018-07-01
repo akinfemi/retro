@@ -17,7 +17,7 @@ class Game{
         int game_board_height;
         int num_enemies;
         int num_bullets;
-        Player plyr;
+        Player * plyr;
         Enemy *enemies;
         Bullet * bullets;
     
@@ -34,7 +34,7 @@ class Game{
         int get_game_board_width() const;
         int get_game_board_height() const;
 
-        Player get_player() const;
+        Player * get_player() const;
         Enemy * get_enemies() const;
         int get_num_enemies() const;
         void set_num_enemies(int n);
