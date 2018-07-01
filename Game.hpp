@@ -18,10 +18,8 @@ class Game{
         int game_board_width;
         int game_board_height;
         int num_enemies;
-        int num_bullets;
         Player * plyr;
         Enemy **enemies;
-        Bullet bullets[NUM_BULLETS];
     
     public:
         Game();
@@ -37,22 +35,21 @@ class Game{
         int get_game_board_height() const;
 
         Player * get_player() const;
+        void set_player(Player * player);
+        
         Enemy ** get_enemies() const;
         int get_num_enemies() const;
         void set_num_enemies(int n);
+        void add_enemies(Enemy **enemies);
+
         void set_bullet_burst(int n);
 		void checkCollisions();
-
-        void add_bullet(Bullet& bullet);
-        Bullet *get_bullets();
-        int get_num_bullets() const;
 
         void action(int key);
 
         void update_screen();
         void init_screen();
-        void set_player(Player * player);
-        void add_enemies(Enemy **enemies);
+
         void run();
         void clean();
 };

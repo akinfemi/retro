@@ -7,8 +7,6 @@
 
 Game::Game()
 {
-	std::cout << "Game is starting..." << std::endl;
-
     init_screen();
 
     keypad(stdscr, TRUE); // Fixes arrow keys (UP, DOWN, LEFT, RIGHT) getting mixed with Escape character
@@ -24,7 +22,6 @@ Game::Game()
     box(score_board, 0,0);
     wrefresh(score_board);
 
-    this->num_bullets = NUM_BULLETS;
     this->num_enemies = 96;
 
     Player *plyr = new Player();
@@ -50,7 +47,6 @@ Game& Game::operator=(Game const & rhs){
     this->plyr = rhs.get_player();
     this->enemies = rhs.get_enemies();
     this->num_enemies = rhs.get_num_enemies();
-    this->num_bullets = rhs.get_num_bullets();
     this->game_board_width = get_game_board_width();
     this->game_board_height = get_game_board_height();
     return (*this);
@@ -95,32 +91,6 @@ void Game::set_num_enemies(int n){
     this->num_enemies = n;
 }
 
-void Game::set_bullet_burst(int n){
-    this->num_bullets = n;
-}
-
-void Game::add_bullet(Bullet &bullet){
-    Bullet *bullets = this->get_bullets();
-    for (int i = 0; i < get_num_bullets(); i++){
-        if (bullets[i].alive == false){
-            bullets[i].setX(bullet.getX());
-            bullets[i].setY(bullet.getY());
-
-            bullets[i].setX(50);
-            bullets[i].setY(50);
-            bullets[i].alive = true;
-        }
-    }
-}
-
-Bullet * Game::get_bullets(){
-    return this->bullets;
-}
-
-int Game::get_num_bullets() const {
-    return this->num_bullets;
-}
-
 void Game::update_screen(){
     wclear(game_board);
     Enemy ** enemies;
@@ -131,14 +101,9 @@ void Game::update_screen(){
             enemies[i]->draw(this->get_game_board());
         }
     }
-
-    if (this->get_player()->alive)
+    if (this->get_player() && this->get_player()->alive){
         this->get_player()->draw(this->get_game_board());
-    
-    for (int i = 0; i < this->get_num_bullets(); i++){
-            bullets[i].draw(game_board);
-	}
-
+    }
 	checkCollisions();
 }
 
@@ -168,17 +133,14 @@ void Game::init_screen()
 	noecho(); // Don't echo any keypresses
 	curs_set(FALSE); // Don't display a cursor
 	printw("Press x key to exit.");
-	// for (int i = 0; i < this->get_num_bullets(); i++)
-	// {
-	// 	bullets[i].setX(78);
-	// 	bullets[i].setY(10);
-	// }
 	refresh();
 }
 
 void Game::run()
 {
 	/* Game loop */
+    if (!this->get_player())
+        return ;
 	while (this->get_player()->alive) {
         
 		int keyPress = getch();
@@ -213,6 +175,8 @@ void Game::action(int key){
 }
 
 void Game::checkCollisions(){
+    if (!this->plyr || !this->get_enemies())
+        return ;
     for (int i = 0; i < this->get_num_enemies(); i++){
 		if (std::abs(this->plyr->getX() - this->get_enemies()[i]->getX()) <= 2 &&
 				std::abs(this->plyr->getY() - this->get_enemies()[i]->getY()) <= 1)
