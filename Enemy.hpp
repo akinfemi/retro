@@ -13,9 +13,9 @@ class Enemy : public GameEntity {
         Enemy& operator=(Enemy const & rhs);
         Enemy(Enemy const & copy);
 
-        void move();
         void draw();
 
+        int get_bullets_to_kill() const;
         //Bonus function
         void shoot();
 };

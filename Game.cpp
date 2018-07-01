@@ -40,7 +40,7 @@ WINDOW* Game::get_game_board() const{
     return this->game_board;
 }
 
-Player& Game::get_player() const{
+Player Game::get_player() const{
     return this->plyr;
 }
 
@@ -125,7 +125,7 @@ void Game::run()
 
 	WINDOW *retro_world;
 	keypad(stdscr, TRUE); // Fixes arrow keys (UP, DOWN, LEFT, RIGHT) getting mixed with Escape character
-	int offset_x, offset_y, max_x, max_y;
+	int offset_x, offset_y;
 	printw("Press escape key to exit.");
 	refresh();
 

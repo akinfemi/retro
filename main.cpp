@@ -8,7 +8,7 @@ int main(void)
     Player plyr;
     Enemy * enemies = new Enemy[game.get_num_enemies()];
 
-    game.init_screen();
+    // game.init_screen();
     game.set_player(plyr);
     game.add_enemies(enemies);
     game.run();

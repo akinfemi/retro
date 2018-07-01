@@ -29,7 +29,7 @@ class Game{
         WINDOW* get_score_board() const;
         WINDOW* get_game_board() const;
 
-        Player &get_player() const;
+        Player get_player() const;
         Enemy * get_enemies() const;
         int get_num_enemies() const;
         void set_num_enemies(int n);
