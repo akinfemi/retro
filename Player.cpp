@@ -1,21 +1,22 @@
 #include "Player.hpp"
 
-Player::Player(){
+Player::Player(){}
 
+Player::~Player(){}
+
+Player::Player(Player const & copy){
+    *this = copy;
 }
 
-Player::~Player(){
-
+Player& Player::operator=(Player const & rhs){
+    this->type = rhs.getType();
+    return (*this);
 }
 
-Player::Player(Player const &copy){
+void Player::draw(){
+    //#TODO
 }
 
-Player& Player::operator=(Player const &rhs){
-	(void)rhs;
-	return *this;
+void Player::shoot(){
+    //#TODO
 }
-
-void GameEntity::move() {}
-
-void GameEntity::shoot() {}

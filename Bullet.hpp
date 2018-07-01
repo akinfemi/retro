@@ -12,7 +12,8 @@ class Bullet : public GameEntity {
         Bullet& operator=(Bullet const & rhs);
         Bullet(Bullet const & copy);
 
-        void move();
+        void draw();
+        void shoot(); //override just to make it a concrete class
 };
 
 #endif

@@ -2,6 +2,8 @@
 # define GAME_ENTITY_H
 
 enum EntityType {ENEMY = 1, PLAYER, BULLET};
+enum Direction {UP, DOWN, LEFT, RIGHT};
+enum Speed {NORMAL = 1, FAST, SUPER_FAST};
 
 class GameEntity{
     private:
@@ -11,14 +13,16 @@ class GameEntity{
         int health;
 
     public:
+        bool alive;
         GameEntity();
         ~GameEntity();
         GameEntity& operator=(GameEntity const & rhs);
         GameEntity(GameEntity const & copy);
-        virtual void move() = 0;
+        virtual void move(Direction dir, Speed spd);
         virtual void die();
         virtual void kill(GameEntity &entity);
         virtual void shoot() = 0;
+        virtual void draw() = 0;
 
         virtual int getX() const;
         virtual int getY() const;
@@ -26,9 +30,9 @@ class GameEntity{
         virtual void setY(int y);
 
         virtual EntityType getType() const;
-        virtual void setType(EntityType type);
+        virtual void setType(EntityType tpe);
         virtual int getHealth() const;
-        virtual void setHealth(int y);
+        virtual void setHealth(int hlth);
 };
 
 #endif

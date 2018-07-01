@@ -16,40 +16,56 @@ GameEntity& GameEntity::operator=(GameEntity const & rhs) {
     return (*this);
 }
 
-void GameEntity::move() {}
-
-void GameEntity::die() {}
-
-void GameEntity::kill(GameEntity &entity) {}
-
-void GameEntity::shoot() {}
-
-/* ------------------------------------------------------------------------- */
-
-int GameEntity::getX() const {
-	return 0;
+void GameEntity::move(Direction dir, Speed spd){
+    if (dir == UP){
+        this->setY(this->getY() - (1 * spd));
+    }else if (dir == LEFT){
+        this->setX(this->getX() - (1 * spd));
+    }
+    else if (dir == RIGHT){
+        this->setX(this->getX() + (1 * spd));
+    }
+    else if (dir == DOWN){
+        this->setY(this->getY() + (1 * spd));
+    }
 }
 
-int GameEntity::getY() const {
-	return 0;
+void GameEntity::die(){
+    this->alive = false;
 }
 
-void GameEntity::setX(int x) {}
-
-void GameEntity::setY(int y) {}
-
-/* ------------------------------------------------------------------------- */
-
-EntityType GameEntity::getType() const {
-	EntityType *test = new EntityType();
-
-	return *test;
+void GameEntity::kill(GameEntity &entity){
+    entity.alive = false;
 }
 
-void GameEntity::setType(EntityType type) {}
-
-int GameEntity::getHealth() const {
-	return 0;
+int GameEntity::getX() const{
+    return this->x_loc;
 }
 
-void GameEntity::setHealth(int y) {}
+int GameEntity::getY() const{
+    return this->y_loc;
+}
+
+void GameEntity::setX(int x){
+    this->x_loc = x;
+}
+
+void GameEntity::setY(int y){
+    this->y_loc = y;
+}
+
+EntityType GameEntity::getType() const{
+    return this->type;
+}
+
+void GameEntity::setType(EntityType type){
+    this->type = type;
+}
+
+int GameEntity::getHealth() const{
+    return this->health;
+}
+
+void GameEntity::setHealth(int health){
+    this->health = health;
+}

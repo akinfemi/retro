@@ -1,5 +1,6 @@
 #ifndef PLAYER_H
 # define PLAYER_H
+
 #include "GameEntity.hpp"
 
 class Player : public GameEntity {
@@ -12,7 +13,9 @@ class Player : public GameEntity {
         Player& operator=(Player const & rhs);
         Player(Player const & copy);
 
-        void move();
+        //overide
+        void shoot();
+        void draw();
 };
 
 #endif
