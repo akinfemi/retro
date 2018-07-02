@@ -1,8 +1,8 @@
 #include "Enemy.hpp"
-
+#include <stdlib.h>
 Enemy::Enemy(){
-    this->alive = true;
-    this->setHealth(1);
+    this->alive = rand() % 2;
+    this->setHealth(rand() % 2);
 	this->type = ENEMY;
 }
 

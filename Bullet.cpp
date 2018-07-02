@@ -22,7 +22,7 @@ void Bullet::draw(WINDOW *win){
 
     x = this->getX();
     y = this->getY();
-	mvwaddch(win, y, x, 'o');
+	mvwaddch(win, y, x, '|');
     // wrefresh(win);
 }
 
