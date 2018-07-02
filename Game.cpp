@@ -123,23 +123,31 @@ long long int Game::getTimeSinceInit(){
 }
 
 void Game::update_screen(){
+	/* Game Board */
 	if (this->time_delta == 0)
 	{
-    wclear(game_board);
-    Enemy ** enemies;
-
-    enemies = get_enemies();
-    for (int i = 0; i < this->get_num_enemies(); i++){
-        if (enemies && enemies[i] && enemies[i]->alive){
-			enemies[i]->setY(enemies[i]->getY() + 1);
-            enemies[i]->draw(this->get_game_board());
-        }
-    }
-    if (this->get_player() && this->get_player()->alive){
-        this->get_player()->draw(this->get_game_board());
-    }
-	checkCollisions();
+	    wclear(game_board);
+	    Enemy ** enemies;
+	
+	    enemies = get_enemies();
+	    for (int i = 0; i < this->get_num_enemies(); i++){
+	        if (enemies && enemies[i] && enemies[i]->alive){
+				enemies[i]->setY(enemies[i]->getY() + 1);
+	            enemies[i]->draw(this->get_game_board());
+	        }
+	    }
+	    if (this->get_player() && this->get_player()->alive){
+	        this->get_player()->draw(this->get_game_board());
+	    }
+		checkCollisions();
 	}
+
+	/* Score Board */
+	wclear(score_board);
+	wprintw(score_board, "Timer (milliseconds): %lld", this->getTimeSinceInit());
+	box(score_board, 0, 0);
+	wrefresh(score_board);
+
 }
 
 void Game::set_player(Player * player){
