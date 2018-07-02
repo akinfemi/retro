@@ -159,6 +159,11 @@ void Game::update_screen(){
             dead_enemies = 0;
         }
 	}
+	/* Score Board */
+	wclear(score_board);
+	wprintw(score_board, "Timer (milliseconds): %lld", this->getTimeSinceInit());
+	box(score_board, 0, 0);
+	wrefresh(score_board);
 }
 
 Enemy ** Game::spawn_enemies(){
