@@ -3,6 +3,7 @@
 Enemy::Enemy(){
     this->alive = true;
     this->setHealth(1);
+	this->type = ENEMY;
 }
 
 Enemy::~Enemy(){}

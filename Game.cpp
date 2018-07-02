@@ -4,6 +4,7 @@
 #define MAX_HEIGHT 47
 #define SPACE 32
 #define N_ROWS 4
+#include <unistd.h>
 
 Game::Game()
 {
@@ -34,6 +35,13 @@ Game::Game()
     this->set_player(plyr);
 
     std::cout << "Game is starting..." << std::endl;
+
+	/* Getting the time since epoch in milliseconds. */
+	ftime(&timer_msec);
+	this->timestamp_msec = ((long long int) timer_msec.time) * 1000ll + (long long int) timer_msec.millitm;
+	this->time_t0 = timestamp_msec;
+	this->time_delta = 0;
+	std::cout << timestamp_msec << std::endl;
 }
 
 Game::~Game(){
@@ -99,6 +107,23 @@ void Game::set_bullet_burst(int n){
     this->num_bullets = n;
 }
 
+// Return the time since last "tick". Milliseconds.
+long long int Game::getTimeDelta(){
+	return this->time_delta;
+}
+
+void Game::updateTimeDelta() {
+	ftime(&timer_msec);
+	this->timestamp_msec = ((long long int) timer_msec.time) * 1000ll + (long long int) timer_msec.millitm;
+	this->time_delta = this->timestamp_msec - this->time_t0;
+	if (this->time_delta >= TIME_DELTA)
+		this->time_delta = 0;
+}
+
+long long int Game::getTimeSinceInit(){
+	return this->time_t0;
+}
+
 void Game::add_bullet(Bullet &bullet){
     Bullet *bullets = this->get_bullets();
     for (int i = 0; i < get_num_bullets(); i++){
@@ -106,8 +131,6 @@ void Game::add_bullet(Bullet &bullet){
             bullets[i].setX(bullet.getX());
             bullets[i].setY(bullet.getY());
 
-            bullets[i].setX(50);
-            bullets[i].setY(50);
             bullets[i].alive = true;
         }
     }
@@ -120,28 +143,7 @@ Bullet * Game::get_bullets(){
 int Game::get_num_bullets() const {
     return this->num_bullets;
 }
-
-void Game::update_screen(){
-    wclear(game_board);
-    Enemy ** enemies;
-
-    enemies = get_enemies();
-    for (int i = 0; i < this->get_num_enemies(); i++){
-        if (enemies && enemies[i] && enemies[i]->alive){
-            enemies[i]->draw(this->get_game_board());
-        }
-    }
-
-    if (this->get_player()->alive)
-        this->get_player()->draw(this->get_game_board());
-    
-    for (int i = 0; i < this->get_num_bullets(); i++){
-            bullets[i].draw(game_board);
-	}
-
-	checkCollisions();
-}
-
+	
 void Game::set_player(Player * player){
     this->plyr = player;
 }
@@ -168,19 +170,34 @@ void Game::init_screen()
 	noecho(); // Don't echo any keypresses
 	curs_set(FALSE); // Don't display a cursor
 	printw("Press x key to exit.");
-	// for (int i = 0; i < this->get_num_bullets(); i++)
-	// {
-	// 	bullets[i].setX(78);
-	// 	bullets[i].setY(10);
-	// }
 	refresh();
+}
+
+void Game::update_screen(){
+	wclear(game_board);
+	Enemy ** enemies;
+
+	enemies = get_enemies();
+	for (int i = 0; i < this->get_num_enemies(); i++){
+		if (enemies && enemies[i] && enemies[i]->alive){
+			enemies[i]->setY(enemies[i]->getY() + 1);
+			enemies[i]->draw(this->get_game_board());
+		}
+	}
+	
+	if (this->get_player()->alive)
+		this->get_player()->draw(this->get_game_board());
+	
+	for (int i = 0; i < this->get_num_bullets(); i++){
+		bullets[i].draw(game_board);
+	}
+	this->checkCollisions();
 }
 
 void Game::run()
 {
 	/* Game loop */
 	while (this->get_player()->alive) {
-        
 		int keyPress = getch();
 		if (keyPress == 'X' or keyPress == 'x') {
 			return;
@@ -193,11 +210,11 @@ void Game::run()
 		{
             action(keyPress);
 		}
-		else{
+		else {
 			update_screen();
-            box(game_board, 0, 0);
-            wrefresh(game_board);
-        }
+	        box(game_board, 0, 0);
+	        wrefresh(game_board);
+		}
 	}
 }
 
@@ -208,7 +225,7 @@ void Game::action(int key){
     }else //move
     {
         dir = (Direction)(KEY_RIGHT - key);
-        this->get_player()->move_entity(dir, NORMAL);
+        this->get_player()->move_entity(dir, FAST);
     }
 }
 

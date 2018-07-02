@@ -6,6 +6,7 @@ Bullet::~Bullet(){}
 
 Bullet::Bullet(Bullet const & copy){
     *this = copy;
+	this->type = BULLET;
 }
 
 Bullet& Bullet::operator=(Bullet const & rhs){
