@@ -175,8 +175,27 @@ void Game::action(int key){
 }
 
 void Game::checkCollisions(){
+    Bullet **bullets;
     if (!this->plyr || !this->get_enemies())
         return ;
+    bullets = this->plyr->get_bullets();
+    if (bullets){
+        for (int i = 0; i < this->plyr->get_num_bullets(); i++){
+            if (bullets[i]->alive == true){ //increase performance
+                for (int j = 0; j < this->get_num_enemies(); j++){
+                    // if (this->get_enemies()[j]->alive == false)
+                    //     continue;
+                    if (std::abs(bullets[i]->getX() - this->get_enemies()[j]->getX()) <= 2 &&
+                            std::abs(bullets[i]->getY() - this->get_enemies()[j]->getY()) <= 1)
+                            {
+                                    this->get_enemies()[j]->alive = false;
+                                    bullets[i]->alive = false;
+                                    break;
+                            }
+                }
+            }
+        }
+    }
     for (int i = 0; i < this->get_num_enemies(); i++){
 		if (std::abs(this->plyr->getX() - this->get_enemies()[i]->getX()) <= 2 &&
 				std::abs(this->plyr->getY() - this->get_enemies()[i]->getY()) <= 1)

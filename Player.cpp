@@ -76,7 +76,6 @@ void Player::shoot(WINDOW *win){
     }
     for (int i = 0; i < this->get_num_bullets(); i++){
         if (bullets[i]->alive == false){
-            printw("SHooot fired");
             bullets[i]->alive = true;
             bullets[i]->setX(this->getX() + 1);
             bullets[i]->setY(this->getY() - 1);
