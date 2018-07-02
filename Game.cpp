@@ -163,7 +163,7 @@ void Game::update_screen(){
         }	
         /* Score Board */
         wclear(score_board);
-        wprintw(score_board, "\n TIMER: %d\n", this->getTimeSinceInit()/1000);
+        wprintw(score_board, "\n TIME: %d\n", this->getTimeSinceInit()/1000);
         wprintw(score_board, "\n SCORE: %d\n", this->score);
         wprintw(score_board, " LEVEL: %d", this->level);
         box(score_board, 0, 0);

@@ -12,7 +12,7 @@
 #include <time.h>
 
 #define NUM_BULLETS 4
-#define TIME_DELTA 200
+#define TIME_DELTA 100
 
 class Game{
     private:
