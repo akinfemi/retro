@@ -8,8 +8,11 @@
 #include <panel.h>
 #include <iostream>
 #include "Player.hpp"
+#include <sys/timeb.h>
+#include <time.h>
 
 #define NUM_BULLETS 4
+#define TIME_DELTA 200
 
 class Game{
     private:
@@ -20,12 +23,21 @@ class Game{
         int num_enemies;
         Player * plyr;
         Enemy **enemies;
+		long long int time_t0;
+		long long int time_last_delta;
+		long long int time_delta;
+		struct timeb timer_msec;
+		long long int timestamp_msec;
     
     public:
         Game();
         ~Game();
         Game (Game const & copy);
         Game& operator=(Game const &rhs);
+
+		long long int getTimeDelta();
+		long long int getTimeSinceInit();
+		void updateTimeDelta();
 
         void set_score_board(WINDOW * sc_b);
         void set_game_board(WINDOW * gm_b);

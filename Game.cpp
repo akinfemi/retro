@@ -4,6 +4,7 @@
 #define MAX_HEIGHT 47
 #define SPACE 32
 #define N_ROWS 4
+#include <unistd.h>
 
 Game::Game()
 {
@@ -31,6 +32,14 @@ Game::Game()
     this->set_player(plyr);
 
     std::cout << "Game is starting..." << std::endl;
+
+	/* Getting the time since epoch in milliseconds. */
+	ftime(&timer_msec);
+	this->timestamp_msec = ((long long int) timer_msec.time) * 1000ll + (long long int) timer_msec.millitm;
+	this->time_t0 = this->timestamp_msec;
+	this->time_last_delta = this->timestamp_msec;
+	this->time_delta = 0;
+	std::cout << timestamp_msec << std::endl;
 }
 
 Game::~Game(){
@@ -91,13 +100,38 @@ void Game::set_num_enemies(int n){
     this->num_enemies = n;
 }
 
+// Return the time since last "tick". Milliseconds.
+long long int Game::getTimeDelta(){
+	return this->time_delta;
+}
+
+void Game::updateTimeDelta() {
+	ftime(&timer_msec);
+	this->timestamp_msec = ((long long int) timer_msec.time) * 1000ll + (long long int) timer_msec.millitm;
+	this->time_delta = this->timestamp_msec - this->time_last_delta;
+	if (this->time_delta >= TIME_DELTA)
+	{
+		this->time_delta = 0;
+		this->time_last_delta = this->timestamp_msec;
+	}
+}
+
+long long int Game::getTimeSinceInit(){
+	ftime(&timer_msec);
+	this->timestamp_msec = ((long long int) timer_msec.time) * 1000ll + (long long int) timer_msec.millitm;
+	return this->timestamp_msec - this->time_t0;
+}
+
 void Game::update_screen(){
+	if (this->time_delta == 0)
+	{
     wclear(game_board);
     Enemy ** enemies;
 
     enemies = get_enemies();
     for (int i = 0; i < this->get_num_enemies(); i++){
         if (enemies && enemies[i] && enemies[i]->alive){
+			enemies[i]->setY(enemies[i]->getY() + 1);
             enemies[i]->draw(this->get_game_board());
         }
     }
@@ -105,6 +139,7 @@ void Game::update_screen(){
         this->get_player()->draw(this->get_game_board());
     }
 	checkCollisions();
+	}
 }
 
 void Game::set_player(Player * player){
@@ -142,7 +177,8 @@ void Game::run()
     if (!this->get_player())
         return ;
 	while (this->get_player()->alive) {
-        
+		updateTimeDelta();
+		printw("TIME_DELTA: %lld ", this->getTimeDelta());
 		int keyPress = getch();
 		if (keyPress == 'X' or keyPress == 'x') {
 			return;
@@ -155,11 +191,11 @@ void Game::run()
 		{
             action(keyPress);
 		}
-		else{
+		else {
 			update_screen();
-            box(game_board, 0, 0);
-            wrefresh(game_board);
-        }
+	        box(game_board, 0, 0);
+	        wrefresh(game_board);
+		}
 	}
 }
 
@@ -170,7 +206,7 @@ void Game::action(int key){
     }else //move
     {
         dir = (Direction)(KEY_RIGHT - key);
-        this->get_player()->move_entity(dir, NORMAL);
+        this->get_player()->move_entity(dir, FAST);
     }
 }
 
