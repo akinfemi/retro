@@ -1,6 +1,9 @@
 #include "Bullet.hpp"
 
-Bullet::Bullet(){}
+Bullet::Bullet(){
+    this->alive = false;
+    this->type = BULLET;
+}
 
 Bullet::~Bullet(){}
 
@@ -20,7 +23,7 @@ void Bullet::draw(WINDOW *win){
     x = this->getX();
     y = this->getY();
 	mvwaddch(win, y, x, 'o');
-    wrefresh(win);
+    // wrefresh(win);
 }
 
 void Bullet::shoot(WINDOW *win){

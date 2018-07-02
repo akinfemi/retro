@@ -7,9 +7,8 @@
 Player::Player(){
     this->alive = true;
     this->type = PLAYER;
-
-    setX(MAX_WIDTH / 2);
-    setY(MAX_HEIGHT / 2);
+    this->num_bullets = 20;
+    add_bullets();
 }
 
 Player::~Player(){}
@@ -40,10 +39,48 @@ void Player::draw(WINDOW *win){
         mvwaddch(win,y+1, x-1, bottom[i]);
         x++;
     }
+
+    //bullets
+    for (int i = 0; i < this->get_num_bullets(); i++){
+        if (bullets[i]->alive){
+            bullets[i]->move_entity(UP, NORMAL);
+            bullets[i]->draw(win);
+            if (bullets[i]->getY() < 0){
+                bullets[i]->alive = false;
+            }
+        }
+    }
+}
+
+void Player::add_bullets(){
+    Bullet ** bullets = new Bullet*[this->get_num_bullets()];
+    for (int j = 0; j < this->get_num_bullets(); j++){
+        bullets[j] = new Bullet();
+    }
+    this->bullets = bullets;;
+}
+
+Bullet **Player::get_bullets(){
+    return this->bullets;
+}
+
+int Player::get_num_bullets() const {
+    return this->num_bullets;
 }
 
 void Player::shoot(WINDOW *win){
     //#TODO
-	
+    Bullet **bullets = this->get_bullets();
+    if (!bullets || !*bullets){
+        return ;
+    }
+    for (int i = 0; i < this->get_num_bullets(); i++){
+        if (bullets[i]->alive == false){
+            printw("SHooot fired");
+            bullets[i]->alive = true;
+            bullets[i]->setX(this->getX() + 1);
+            bullets[i]->setY(this->getY() - 1);
+        }
+    }
     (void)win;
 }
