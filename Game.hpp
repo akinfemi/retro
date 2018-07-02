@@ -12,7 +12,7 @@
 #include <time.h>
 
 #define NUM_BULLETS 4
-#define TIME_DELTA 17
+#define TIME_DELTA 100
 
 class Game{
     private:
@@ -24,6 +24,7 @@ class Game{
         Player * plyr;
         Enemy **enemies;
 		long long int time_t0;
+		long long int time_last_delta;
 		long long int time_delta;
 		struct timeb timer_msec;
 		long long int timestamp_msec;

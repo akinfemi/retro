@@ -36,7 +36,8 @@ Game::Game()
 	/* Getting the time since epoch in milliseconds. */
 	ftime(&timer_msec);
 	this->timestamp_msec = ((long long int) timer_msec.time) * 1000ll + (long long int) timer_msec.millitm;
-	this->time_t0 = timestamp_msec;
+	this->time_t0 = this->timestamp_msec;
+	this->time_last_delta = this->timestamp_msec;
 	this->time_delta = 0;
 	std::cout << timestamp_msec << std::endl;
 }
@@ -107,13 +108,18 @@ long long int Game::getTimeDelta(){
 void Game::updateTimeDelta() {
 	ftime(&timer_msec);
 	this->timestamp_msec = ((long long int) timer_msec.time) * 1000ll + (long long int) timer_msec.millitm;
-	this->time_delta = this->timestamp_msec - this->time_t0;
+	this->time_delta = this->timestamp_msec - this->time_last_delta;
 	if (this->time_delta >= TIME_DELTA)
+	{
 		this->time_delta = 0;
+		this->time_last_delta = this->timestamp_msec;
+	}
 }
 
 long long int Game::getTimeSinceInit(){
-	return this->time_t0;
+	ftime(&timer_msec);
+	this->timestamp_msec = ((long long int) timer_msec.time) * 1000ll + (long long int) timer_msec.millitm;
+	return this->timestamp_msec - this->time_t0;
 }
 
 void Game::update_screen(){
@@ -167,6 +173,8 @@ void Game::run()
     if (!this->get_player())
         return ;
 	while (this->get_player()->alive) {
+		updateTimeDelta();
+		printw("TIME_DELTA: %lld ", this->getTimeDelta());
 		int keyPress = getch();
 		if (keyPress == 'X' or keyPress == 'x') {
 			return;
