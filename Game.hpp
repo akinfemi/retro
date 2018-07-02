@@ -66,6 +66,8 @@ class Game{
         void clean();
 
         Enemy ** spawn_enemies();
+        int score;
+        int level;
 };
 
 #endif

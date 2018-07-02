@@ -8,6 +8,8 @@
 
 Game::Game()
 {
+    this->level = 0;
+    this->score = 0;
     init_screen();
     srand(time(NULL));
 
@@ -156,14 +158,17 @@ void Game::update_screen(){
         checkCollisions();
         if (dead_enemies == this->get_num_enemies()){
             this->add_enemies(enemies);
+            this->level += 1;
             dead_enemies = 0;
-        }
+        }	
+        /* Score Board */
+        wclear(score_board);
+        wprintw(score_board, "\n SCORE: %d\n", this->score);
+        wprintw(score_board, " LEVEL: %d", this->level);
+        box(score_board, 0, 0);
+        wrefresh(score_board);
 	}
-	/* Score Board */
-	wclear(score_board);
-	wprintw(score_board, "Timer (milliseconds): %lld", this->getTimeSinceInit());
-	box(score_board, 0, 0);
-	wrefresh(score_board);
+
 }
 
 Enemy ** Game::spawn_enemies(){
@@ -251,24 +256,23 @@ void Game::checkCollisions(){
         return ;
     bullets = this->plyr->get_bullets();
     if (bullets){
-        for (int i = 0; i < this->plyr->get_num_bullets(); i++){
-            if (bullets[i]->alive == true){
-                for (int j = 0; j < this->get_num_enemies(); j++){
-                    // if (this->get_enemies()[j]->alive == false)
-                    //     continue;
-                    if (std::abs(bullets[i]->getX() - this->get_enemies()[j]->getX()) <= 2 &&
-                            std::abs(bullets[i]->getY() - this->get_enemies()[j]->getY()) <= 1)
-                            {
-                                health = this->get_enemies()[j]->getHealth();
-                                if (health <= 1){
-                                    this->get_enemies()[j]->alive = false;
-                                }
-                                bullets[i]->alive = false;
-                                break;
+    for (int i = 0; i < this->plyr->get_num_bullets(); i++){
+        if (bullets[i]->alive == true){
+            for (int j = 0; j < this->get_num_enemies(); j++){
+                if (std::abs(bullets[i]->getX() - this->get_enemies()[j]->getX()) <= 2 &&
+                        std::abs(bullets[i]->getY() - this->get_enemies()[j]->getY()) <= 1)
+                        {
+                            health = this->get_enemies()[j]->getHealth();
+                            if (health <= 1){
+                                this->get_enemies()[j]->alive = false;
+                                this->score += 10;
                             }
-                }
+                            bullets[i]->alive = false;
+                            break;
+                        }
             }
         }
+    }
     }
     for (int i = 0; i < this->get_num_enemies(); i++){
 		if (std::abs(this->plyr->getX() - this->get_enemies()[i]->getX()) <= 2 &&
