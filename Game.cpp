@@ -123,12 +123,15 @@ long long int Game::getTimeSinceInit(){
 }
 
 void Game::update_screen(){
+	if (this->time_delta == 0)
+	{
     wclear(game_board);
     Enemy ** enemies;
 
     enemies = get_enemies();
     for (int i = 0; i < this->get_num_enemies(); i++){
         if (enemies && enemies[i] && enemies[i]->alive){
+			enemies[i]->setY(enemies[i]->getY() + 1);
             enemies[i]->draw(this->get_game_board());
         }
     }
@@ -136,6 +139,7 @@ void Game::update_screen(){
         this->get_player()->draw(this->get_game_board());
     }
 	checkCollisions();
+	}
 }
 
 void Game::set_player(Player * player){
