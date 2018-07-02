@@ -10,6 +10,11 @@ Game::Game()
 {
     init_screen();
     srand(time(NULL));
+
+    start_color();
+    init_pair(1, COLOR_GREEN, COLOR_BLACK);
+    init_pair(2, COLOR_CYAN, COLOR_RED);
+
     keypad(stdscr, TRUE); // Fixes arrow keys (UP, DOWN, LEFT, RIGHT) getting mixed with Escape character
 	int offset_x, offset_y;//, max_x, max_y;
 
@@ -21,6 +26,7 @@ Game::Game()
 
     set_score_board(newwin(MAX_HEIGHT - 10, 40, 5, 5));
     box(score_board, 0,0);
+    wbkgd(score_board, COLOR_PAIR(1));
     wrefresh(score_board);
 
     this->num_enemies = 96;
@@ -43,6 +49,7 @@ Game::Game()
 }
 
 Game::~Game(){
+    this->clean();
 	std::cout << "Game has exited." << std::endl;
 }
 
@@ -148,8 +155,6 @@ void Game::update_screen(){
         }
         checkCollisions();
         if (dead_enemies == this->get_num_enemies()){
-            // std::cout << "RE spawn" << std::endl;
-            printw("%s","Re spawninngngngng");
             this->add_enemies(enemies);
             dead_enemies = 0;
         }
@@ -217,6 +222,7 @@ void Game::run()
 		else {
 			update_screen();
 	        box(game_board, 0, 0);
+            wbkgd(game_board, COLOR_PAIR(1));
 	        wrefresh(game_board);
 		}
 	}
