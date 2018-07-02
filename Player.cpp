@@ -7,7 +7,7 @@
 Player::Player(){
     this->alive = true;
     this->type = PLAYER;
-    this->num_bullets = 20;
+    this->num_bullets = 80;
     add_bullets();
 }
 
@@ -77,8 +77,8 @@ void Player::shoot(WINDOW *win){
     for (int i = 0; i < this->get_num_bullets(); i++){
         if (bullets[i]->alive == false){
             bullets[i]->alive = true;
-            bullets[i]->setX(this->getX() + 1);
-            bullets[i]->setY(this->getY() - 1);
+            bullets[i]->setX(this->getX());
+            bullets[i]->setY(this->getY());
         }
     }
     (void)win;

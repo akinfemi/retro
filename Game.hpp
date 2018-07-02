@@ -64,6 +64,8 @@ class Game{
 
         void run();
         void clean();
+
+        Enemy ** spawn_enemies();
 };
 
 #endif

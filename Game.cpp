@@ -9,7 +9,7 @@
 Game::Game()
 {
     init_screen();
-
+    srand(time(NULL));
     keypad(stdscr, TRUE); // Fixes arrow keys (UP, DOWN, LEFT, RIGHT) getting mixed with Escape character
 	int offset_x, offset_y;//, max_x, max_y;
 
@@ -39,7 +39,7 @@ Game::Game()
 	this->time_t0 = this->timestamp_msec;
 	this->time_last_delta = this->timestamp_msec;
 	this->time_delta = 0;
-	std::cout << timestamp_msec << std::endl;
+	// std::cout << timestamp_msec << std::endl;
 }
 
 Game::~Game(){
@@ -123,23 +123,45 @@ long long int Game::getTimeSinceInit(){
 }
 
 void Game::update_screen(){
+    int dead_enemies = 0;
 	if (this->time_delta == 0)
 	{
-    wclear(game_board);
-    Enemy ** enemies;
+        wclear(game_board);
+        Enemy ** enemies;
 
-    enemies = get_enemies();
-    for (int i = 0; i < this->get_num_enemies(); i++){
-        if (enemies && enemies[i] && enemies[i]->alive){
-			enemies[i]->setY(enemies[i]->getY() + 1);
-            enemies[i]->draw(this->get_game_board());
+        enemies = get_enemies();
+        for (int i = 0; i < this->get_num_enemies(); i++){
+            if (enemies && enemies[i] && enemies[i]->alive){
+                enemies[i]->setY(enemies[i]->getY() + 1);
+                if (enemies[i]->getY() > MAX_HEIGHT){
+                    enemies[i]->alive = false;
+                }
+                enemies[i]->draw(this->get_game_board());
+            }
+            else
+            {
+                dead_enemies += 1;
+            }
         }
-    }
-    if (this->get_player() && this->get_player()->alive){
-        this->get_player()->draw(this->get_game_board());
-    }
-	checkCollisions();
+        if (this->get_player() && this->get_player()->alive){
+            this->get_player()->draw(this->get_game_board());
+        }
+        checkCollisions();
+        if (dead_enemies == this->get_num_enemies()){
+            // std::cout << "RE spawn" << std::endl;
+            printw("%s","Re spawninngngngng");
+            this->add_enemies(enemies);
+            dead_enemies = 0;
+        }
 	}
+}
+
+Enemy ** Game::spawn_enemies(){
+    Enemy ** enemies = new Enemy*[this->get_num_enemies()];
+    for (int i = 0; i < this->get_num_enemies(); i++){
+        enemies[i] = new Enemy();
+    }
+    return enemies;
 }
 
 void Game::set_player(Player * player){
@@ -152,9 +174,10 @@ void Game::add_enemies(Enemy ** enemies){
         int x = 5;
         int y = 1 + (3 * j);
         for (int k = 0; k < this->get_num_enemies() / N_ROWS; k++){
-            enemies[i] = new Enemy();
+            // enemies[i] = new Enemy();
             enemies[i]->setX( x );
             enemies[i]->setY( y );
+            enemies[i]->alive = rand() % 2;;
             x += 4;
             i++;
         }
@@ -212,19 +235,23 @@ void Game::action(int key){
 
 void Game::checkCollisions(){
     Bullet **bullets;
+    int health = 0;
     if (!this->plyr || !this->get_enemies())
         return ;
     bullets = this->plyr->get_bullets();
     if (bullets){
         for (int i = 0; i < this->plyr->get_num_bullets(); i++){
-            if (bullets[i]->alive == true){ //increase performance
+            if (bullets[i]->alive == true){
                 for (int j = 0; j < this->get_num_enemies(); j++){
                     // if (this->get_enemies()[j]->alive == false)
                     //     continue;
                     if (std::abs(bullets[i]->getX() - this->get_enemies()[j]->getX()) <= 2 &&
                             std::abs(bullets[i]->getY() - this->get_enemies()[j]->getY()) <= 1)
                             {
-                                this->get_enemies()[j]->alive = false;
+                                health = this->get_enemies()[j]->getHealth();
+                                if (health <= 1){
+                                    this->get_enemies()[j]->alive = false;
+                                }
                                 bullets[i]->alive = false;
                                 break;
                             }
@@ -235,7 +262,11 @@ void Game::checkCollisions(){
     for (int i = 0; i < this->get_num_enemies(); i++){
 		if (std::abs(this->plyr->getX() - this->get_enemies()[i]->getX()) <= 2 &&
 				std::abs(this->plyr->getY() - this->get_enemies()[i]->getY()) <= 1)
-			this->plyr->alive = false;
+                {
+                    if (this->get_enemies()[i]->alive == true){
+            			this->plyr->alive = false;
+                    }
+                }
     }
 }
 
