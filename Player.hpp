@@ -16,7 +16,7 @@ class Player : public GameEntity {
         Player& operator=(Player const & rhs);
         Player(Player const & copy);
 
-        // void add_bullet(Bullet ** bullet);
+        void add_bullets();
         Bullet **get_bullets();
         int get_num_bullets() const;
 
