@@ -178,7 +178,7 @@ void Game::run()
         return ;
 	while (this->get_player()->alive) {
 		updateTimeDelta();
-		printw("TIME_DELTA: %lld ", this->getTimeDelta());
+		// printw("TIME_DELTA: %lld ", this->getTimeDelta());
 		int keyPress = getch();
 		if (keyPress == 'X' or keyPress == 'x') {
 			return;
@@ -206,7 +206,7 @@ void Game::action(int key){
     }else //move
     {
         dir = (Direction)(KEY_RIGHT - key);
-        this->get_player()->move_entity(dir, FAST);
+        this->get_player()->move_entity(dir, NORMAL);
     }
 }
 
@@ -224,9 +224,9 @@ void Game::checkCollisions(){
                     if (std::abs(bullets[i]->getX() - this->get_enemies()[j]->getX()) <= 2 &&
                             std::abs(bullets[i]->getY() - this->get_enemies()[j]->getY()) <= 1)
                             {
-                                    this->get_enemies()[j]->alive = false;
-                                    bullets[i]->alive = false;
-                                    break;
+                                this->get_enemies()[j]->alive = false;
+                                bullets[i]->alive = false;
+                                break;
                             }
                 }
             }
